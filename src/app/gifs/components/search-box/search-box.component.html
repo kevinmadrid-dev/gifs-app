@@ -1,10 +1,22 @@
-<h5>Shearch Gifs</h5>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5 class="mb-0">Buscar GIFs</h5>
 
-<input
-  type="text"
-  placeholder="Gif name"
-  #txtSearchInput
-  (keyup.enter)="searchItem()"
-  class="form-control"
-  autofocus
-/>
+  @if (isLoading()) {
+  <div class="spinner-border spinner-border-sm text-primary" role="status">
+    <span class="visually-hidden">Cargando</span>
+  </div>
+  }
+</div>
+
+<div class="input-group">
+  <input
+    type="text"
+    placeholder="Busca tu GIF favorito"
+    #txtSearchInput
+    (keyup.enter)="searchItem()"
+    (keypress)="onKeyPress($event)"
+    class="form-control"
+    [disabled]="isLoading()"
+    autofocus
+  />
+</div>

@@ -1,15 +1,58 @@
 <div id="sidebar" class="bg-dark border-right p-3">
-  <h3 class="text-light">GifsApp</h3>
+  <a href="" class="text-decoration-none text-light">
+    <h3 class="text-light">GifsApp</h3>
+  </a>
 
   <hr class="text-white" />
 
-  <div class="list-group list-reset">
+  <!-- Botón para cargar trending -->
+  <button
+    (click)="loadTrending()"
+    class="btn btn-primary btn-sm mb-3 w-100"
+    title="Cargar GIFs populares"
+  >
+    🔥 Populares
+  </button>
+
+  <!-- Historial de búsquedas -->
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h5 class="text-light mb-0">Historial</h5>
     <button
-      *ngFor="let item of listItem"
-      (click)="reSearch(item)"
-      class="list-group-item list-group-item-action"
+      *ngIf="hasHistory()"
+      (click)="clearHistory()"
+      class="btn btn-sm"
+      title="Limpiar historial"
     >
-      {{ item | titlecase }}
+      🗑️
     </button>
+  </div>
+
+  <div class="list-group list-reset">
+    @if (hasHistory()) { @for (item of itemHistory(); track item) {
+    <div
+      class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2"
+    >
+      <button
+        (click)="reSearch(item)"
+        class="btn btn-link text-start p-0 flex-grow-1 text-decoration-none"
+        style="color: inherit"
+      >
+        {{ item | titlecase }}
+      </button>
+
+      <button
+        (click)="removeFromHistory(item)"
+        class="btn text-danger ms-2"
+        title="Eliminar de historial"
+        style="padding: 0.25rem 0.5rem; line-height: 1"
+      >
+        ✕
+      </button>
+    </div>
+    } } @else {
+    <div class="text-muted text-center p-3">
+      <small>No hay búsquedas en el historial</small>
+    </div>
+    }
   </div>
 </div>

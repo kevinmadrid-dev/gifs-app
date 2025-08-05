@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from "@angular/core"
+import { Component, ElementRef, ViewChild, computed } from "@angular/core"
 
 import { GifsService } from "../../services/gifs.service"
 
@@ -12,11 +12,21 @@ export class SearchBoxComponent {
   @ViewChild("txtSearchInput")
   tagInput!: ElementRef<HTMLInputElement>
 
+  // Computed para acceder al estado de carga
+  public isLoading = computed(() => this.gifsService.isLoading())
+
   searchItem(): void {
-    const item = this.tagInput.nativeElement.value
+    const item = this.tagInput.nativeElement.value.trim()
+
+    if (item.length === 0) return
 
     this.gifsService.searchItem(item)
-
     this.tagInput.nativeElement.value = ""
+  }
+
+  onKeyPress(event: KeyboardEvent): void {
+    if (event.key === "Enter") {
+      this.searchItem()
+    }
   }
 }

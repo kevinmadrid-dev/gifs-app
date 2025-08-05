@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core"
+import { Component, Input, OnInit, signal } from "@angular/core"
 
 @Component({
   selector: "shared-lazy-image",
@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from "@angular/core"
 })
 export class LazyImageComponent implements OnInit {
   ngOnInit(): void {
-    if (!this.url) throw new Error("Url property is required")
+    if (!this.url) throw new Error("URL property is required")
   }
 
   @Input()
@@ -15,11 +15,18 @@ export class LazyImageComponent implements OnInit {
   @Input()
   alt: string = ""
 
-  hasLoaded: boolean = false
+  // Signal para controlar el estado de carga
+  private _hasLoaded = signal<boolean>(false)
+  public hasLoaded = this._hasLoaded.asReadonly()
 
-  onLoad() {
+  onLoad(): void {
+    // Pequeño delay para mostrar la transición suave
     setTimeout(() => {
-      this.hasLoaded = true
-    }, 1000)
+      this._hasLoaded.set(true)
+    }, 100)
+  }
+
+  onError(): void {
+    console.warn(`Error loading image: ${this.url}`)
   }
 }
